@@ -6,14 +6,16 @@ dao/LikeDAO.java
  dao.LikeDAO
 model/User.java
  model.User
-dao/IDAO.java
- dao.IDAO
+dao/SQLConnection.java
+ dao.SQLConnection
 model/Comment.java
  model.Comment
 model/Post.java
  model.Post
-dao/SQLConnection.java
- dao.SQLConnection
+dao/IDAO.java
+ dao.IDAO
+dao/UserDAO.java
+ dao.UserDAO
 controller/UserController.java
  controller.UserController
 dao/PostDAO.java

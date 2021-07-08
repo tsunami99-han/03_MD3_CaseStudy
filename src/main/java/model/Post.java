@@ -9,10 +9,19 @@ public class Post {
     private String title;
     private String content;
     private String status;
-    private int likeQuantity;
-    private int commentQuantity;
+    private int likeQuantity=0;
+    private int commentQuantity=0;
 
     public Post() {
+    }
+
+    public Post(int id, int user_id, LocalDateTime time, String title, String content, String status) {
+        this.id = id;
+        this.user_id = user_id;
+        this.time = time;
+        this.title = title;
+        this.content = content;
+        this.status = status;
     }
 
     public LocalDateTime getTime() {

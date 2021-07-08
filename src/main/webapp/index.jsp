@@ -13,5 +13,7 @@
   <body>
   $END$
   <a href="/users?action=list">ListPost</a>
+  <a href="/users?action=view&id=2">View nè</a>
+  <a href="/users?action=findbyname?name=Sơn">Xem theo tên nè</a>
   </body>
 </html>
