@@ -6,13 +6,13 @@ import java.util.List;
 public interface IDAO<T> {
     List<T> findAll() throws SQLException, ClassNotFoundException;
 
-    T findById(int id);
+    T findById(int id) throws SQLException, ClassNotFoundException;
 
-    List<T> findByName(String name);
+    List<T> findByName(String name) throws SQLException, ClassNotFoundException;
 
-    void add(T t);
+    void add(T t) throws SQLException, ClassNotFoundException;
 
-    void edit(int id, T t);
+    void edit(int id, T t) throws SQLException, ClassNotFoundException;
 
-    void delete(int id);
+    void delete(int id) throws SQLException, ClassNotFoundException;
 }
