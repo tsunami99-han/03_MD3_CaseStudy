@@ -15,5 +15,7 @@
   <a href="/users?action=list">ListPost</a>
   <a href="/users?action=view&id=2">View nè</a>
   <a href="/users?action=findbyname?name=Sơn">Xem theo tên nè</a>
+  <a href="users?action=create">Create Post</a>
+  <a href="users?action=edit">Edit post</a>
   </body>
 </html>

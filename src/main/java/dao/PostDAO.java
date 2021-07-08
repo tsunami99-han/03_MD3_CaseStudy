@@ -15,10 +15,20 @@ public class PostDAO implements IDAO<Post>{
     SQLConnection connectionSQL = new SQLConnection();
     Connection connection = null;
     PreparedStatement statement = null;
-private final String FIND_ALL_QUERY = "select * from post";
-private final String FIND_BY_ID_QUERY = "select * from post where id = ?;";
-private final String FIND_BY_NAME_QUERY = " select p.id,p.user_id,p.title,p.content,p.time,p.status,p.likequantity,p.commentquantity from post p join user u on p.user_id=u.id where u.fullname like ?; ";
-private final String INSERT_POST_QUERY = "INSERT INTO post (`user_id`, `title`, `content`, `time`, `status`) VALUES (?,?,?,?,?);";
+    private final String FIND_ALL_QUERY = "select * from post";
+    private final String FIND_BY_ID_QUERY = "select * from post where id = ?;";
+    private final String FIND_BY_NAME_QUERY = " select p.id,p.user_id,p.title,p.content,p.time,p.status,p.likequantity,p.commentquantity from post p join user u on p.user_id=u.id where u.fullname like ?; ";
+    private final String FIND_BY_TITLE_QUERY = "select * from post where title like ? ";
+    private final String INSERT_POST_UPDATE = "INSERT INTO post (`user_id`, `title`, `content`, `time`, `status`) VALUES (?,?,?,?,?);";
+    private final String UPDATE_BY_ID_UPDATE = "UPDATE post SET title = ?, content = ?, `status` = ?, likequantity = ?,commentquantity=? WHERE (id = ?); ";
+    private final String DELETE_LIKE_BY_POSTID =" delete from like where post_id= ?";
+    private final String DELETE_COMMENT_BY_POSTID =" delete from comment where post_id = ?";
+    private final String DELETE_POST_BY_ID = "delete from post where id=?";
+    private final String LIKE = "insert into like values (?,?)";
+    private final String UNLIKE="delete from like where post_id= ? and user_id=?";
+    private final String COMMENT="insert into comment values (?,?,?,?) ; ";
+    private final String EDIT_COMMENT="";
+    private final String DELETE_COMMENT= "insert into comment values (?,?,?,?) ; ";
     @Override
     public List<Post> findAll() throws SQLException, ClassNotFoundException {
         List<Post> list=new ArrayList<>();
@@ -68,7 +78,28 @@ private final String INSERT_POST_QUERY = "INSERT INTO post (`user_id`, `title`, 
 
         return null;
     }
+    public List<Post> findByTitle(String title) throws SQLException, ClassNotFoundException {
+        List<Post> list=new ArrayList<>();
+        connection=connectionSQL.getConnection();
+        statement= connection.prepareStatement(FIND_BY_TITLE_QUERY);
+        statement.setString(1,"%"+title+"%");
+        ResultSet resultSet=statement.executeQuery();
+        while (resultSet.next()){
+            int id=resultSet.getInt("id");
+            int user_id=resultSet.getInt("user_id");
+            String timeString=resultSet.getString("time");
+            DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime time=LocalDateTime.parse(timeString,formatter);
+            title =resultSet.getString("title");
+            String content = resultSet.getString("content");
+            String status = resultSet.getString("status");
+            int likeQuantity = resultSet.getInt("likequantity");
+            int commentQuantity=resultSet.getInt("commentquantity");
+            list.add(new Post(id,user_id,time,title,content,status,likeQuantity,commentQuantity));
+        }
 
+        return list;
+    }
     public List<Post> findByUserName(String name) throws SQLException, ClassNotFoundException {
     connection=connectionSQL.getConnection();
     statement= connection.prepareStatement(FIND_BY_NAME_QUERY);
@@ -92,7 +123,7 @@ private final String INSERT_POST_QUERY = "INSERT INTO post (`user_id`, `title`, 
     @Override
     public void add(Post post) throws SQLException, ClassNotFoundException {
         connection=connectionSQL.getConnection();
-        statement= connection.prepareStatement(INSERT_POST_QUERY);
+        statement= connection.prepareStatement(INSERT_POST_UPDATE);
         statement.setInt(1,post.getUser_id());
         statement.setString(2,post.getTitle());
         statement.setString(3,post.getContent());
@@ -103,11 +134,35 @@ private final String INSERT_POST_QUERY = "INSERT INTO post (`user_id`, `title`, 
 
     @Override
     public void edit(int id, Post post) throws SQLException, ClassNotFoundException {
-
+    connection=connectionSQL.getConnection();
+    statement= connection.prepareStatement(UPDATE_BY_ID_UPDATE);
+    statement.setString(1,post.getTitle());
+    statement.setString(2,post.getContent());
+    statement.setString(3,post.getStatus());
+    statement.setInt(4,post.getLikeQuantity());
+    statement.setInt(5,post.getCommentQuantity());
+    statement.executeUpdate();
     }
 
     @Override
-    public void delete(int id) {
-
+    public void delete(int id) throws SQLException, ClassNotFoundException {
+        deleteLike(id);
+        deleteComment(id);
+    connection=connectionSQL.getConnection();
+    statement= connection.prepareStatement(DELETE_POST_BY_ID);
+    statement.setInt(1,id);
+    statement.executeUpdate();
+    }
+    public void deleteLike(int id) throws SQLException, ClassNotFoundException {
+    connection=connectionSQL.getConnection();
+    statement= connection.prepareStatement(DELETE_LIKE_BY_POSTID);
+    statement.setInt(1,id);
+    statement.executeUpdate();
+    }
+    public void deleteComment(int id) throws SQLException, ClassNotFoundException {
+        connection=connectionSQL.getConnection();
+        statement= connection.prepareStatement(DELETE_COMMENT_BY_POSTID);
+        statement.setInt(1,id);
+        statement.executeUpdate();
     }
 }

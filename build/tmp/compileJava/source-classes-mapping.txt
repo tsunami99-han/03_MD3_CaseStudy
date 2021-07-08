@@ -10,12 +10,12 @@ dao/SQLConnection.java
  dao.SQLConnection
 model/Comment.java
  model.Comment
-model/Post.java
- model.Post
 dao/IDAO.java
  dao.IDAO
 dao/UserDAO.java
  dao.UserDAO
+model/Post.java
+ model.Post
 controller/UserController.java
  controller.UserController
 dao/PostDAO.java
