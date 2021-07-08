@@ -8,7 +8,7 @@ public interface IDAO<T> {
 
     T findById(int id) throws SQLException, ClassNotFoundException;
 
-    List<T> findByName(String name);
+    List<T> findByName(String name) throws SQLException, ClassNotFoundException;
 
     void add(T t) throws SQLException, ClassNotFoundException;
 

@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class User {
@@ -19,6 +20,17 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public User(String username, String password, String fullName, String role, LocalDate dateOfBirth, String address, String desc, String imgLink) {
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.role = role;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.desc = desc;
+        this.imgLink = imgLink;
     }
 
     public User(int id, String username, String password, String fullName, String role, LocalDate dateOfBirth, String address, String desc, String imgLink) {

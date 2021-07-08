@@ -12,7 +12,7 @@ section.section1{
 }
 
 nav{
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -46,6 +46,7 @@ nav ul li{
     list-style: none;
 }
 nav ul li a{
+    font-size: 15px;
     position: relative;
     display: block;
     height: 80px;
@@ -78,4 +79,29 @@ nav ul li a:hover{
 }
 section.section2{
     padding: 150px;
+}
+
+.row1 {
+    margin-top: 20px;
+}
+.div1 {
+
+    background-image: url("https://st.quantrimang.com/photos/image/2018/05/09/hinh-nen-dien-thoai-10.gif") !important;
+}
+.time {
+    margin-left: 450px;
+    margin-top: 5px;
+    font-size: smaller;
+}
+.col-md-3 {
+    margin-left: 10px;
+}
+.col-md-7 {
+    margin-left: 5px;
+}
+.post{
+    border:1px solid rgba(0, 0, 0, 0.82);
+    margin-top: 5px;
+    border-radius: 20px;
+    padding-left: 10px;
 }

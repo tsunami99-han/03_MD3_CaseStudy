@@ -15,7 +15,8 @@ public class PostDAO implements IDAO<Post>{
     SQLConnection connectionSQL = new SQLConnection();
     Connection connection = null;
     PreparedStatement statement = null;
-    private final String FIND_ALL_QUERY = "select * from post";
+    DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final String FIND_ALL_QUERY = "select * from post order by time desc";
     private final String FIND_BY_ID_QUERY = "select * from post where id = ?;";
     private final String FIND_BY_NAME_QUERY = " select p.id,p.user_id,p.title,p.content,p.time,p.status,p.likequantity,p.commentquantity from post p join user u on p.user_id=u.id where u.fullname like ?; ";
     private final String FIND_BY_TITLE_QUERY = "select * from post where title like ? ";
@@ -35,7 +36,6 @@ public class PostDAO implements IDAO<Post>{
             int id=resultSet.getInt("id");
             int user_id=resultSet.getInt("user_id");
             String timeString=resultSet.getString("time");
-            DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime time=LocalDateTime.parse(timeString,formatter);
             String title =resultSet.getString("title");
             String content = resultSet.getString("content");
