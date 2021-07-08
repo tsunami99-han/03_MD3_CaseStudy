@@ -13,9 +13,11 @@ import java.util.List;
 @WebServlet(name = "UserController", urlPatterns = "/users")
 public class UserController extends HttpServlet {
     PostDAO postDAO = new PostDAO();
-    String username= "";
+    String username=null;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
         String action = request.getParameter("action");
         if (action == null) {
             action = "";
@@ -50,7 +52,8 @@ public class UserController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
     }
     private void findByName(HttpServletRequest request, HttpServletResponse response) throws SQLException, ClassNotFoundException, ServletException, IOException {
         String name=request.getParameter("name");
@@ -74,7 +77,8 @@ public class UserController extends HttpServlet {
     private void findAll(HttpServletRequest request, HttpServletResponse response) throws SQLException, ClassNotFoundException, ServletException, IOException {
         List<Post> list = postDAO.findAll();
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("post/list.jsp");
-        request.setAttribute("listPost", list);
+        request.setAttribute("list", list);
+        request.setAttribute("username",username);
         requestDispatcher.forward(request, response);
     }
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

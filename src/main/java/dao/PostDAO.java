@@ -20,15 +20,11 @@ public class PostDAO implements IDAO<Post>{
     private final String FIND_BY_NAME_QUERY = " select p.id,p.user_id,p.title,p.content,p.time,p.status,p.likequantity,p.commentquantity from post p join user u on p.user_id=u.id where u.fullname like ?; ";
     private final String FIND_BY_TITLE_QUERY = "select * from post where title like ? ";
     private final String INSERT_POST_UPDATE = "INSERT INTO post (`user_id`, `title`, `content`, `time`, `status`) VALUES (?,?,?,?,?);";
-    private final String UPDATE_BY_ID_UPDATE = "UPDATE post SET title = ?, content = ?, `status` = ?, likequantity = ?,commentquantity=? WHERE (id = ?); ";
-    private final String DELETE_LIKE_BY_POSTID =" delete from like where post_id= ?";
+    private final String UPDATE_BY_ID_UPDATE = "UPDATE post SET title = ?, content = ?, `status` = ?WHERE (id = ?); ";
     private final String DELETE_COMMENT_BY_POSTID =" delete from comment where post_id = ?";
     private final String DELETE_POST_BY_ID = "delete from post where id=?";
-    private final String LIKE = "insert into like values (?,?)";
-    private final String UNLIKE="delete from like where post_id= ? and user_id=?";
-    private final String COMMENT="insert into comment values (?,?,?,?) ; ";
-    private final String EDIT_COMMENT="";
-    private final String DELETE_COMMENT= "insert into comment values (?,?,?,?) ; ";
+    private final String DELETE_LIKE_BY_POSTID =" delete from like where post_id= ?";
+
     @Override
     public List<Post> findAll() throws SQLException, ClassNotFoundException {
         List<Post> list=new ArrayList<>();
@@ -139,8 +135,7 @@ public class PostDAO implements IDAO<Post>{
     statement.setString(1,post.getTitle());
     statement.setString(2,post.getContent());
     statement.setString(3,post.getStatus());
-    statement.setInt(4,post.getLikeQuantity());
-    statement.setInt(5,post.getCommentQuantity());
+    statement.setInt(4,id);
     statement.executeUpdate();
     }
 
