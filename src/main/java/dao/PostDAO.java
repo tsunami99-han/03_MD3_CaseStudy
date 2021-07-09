@@ -16,6 +16,7 @@ public class PostDAO implements IDAO<Post>{
     Connection connection = null;
     PreparedStatement statement = null;
     DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final String FIND_BY_USER_ID_QUERY ="select * from post where user_id=?;";
     private final String FIND_ALL_QUERY = "select * from post order by time desc";
     private final String FIND_BY_ID_QUERY = "select * from post where id = ?;";
     private final String FIND_BY_NAME_QUERY = " select p.id,p.user_id,p.title,p.content,p.time,p.status,p.likequantity,p.commentquantity from post p join user u on p.user_id=u.id where u.fullname like ?; ";
@@ -29,8 +30,66 @@ public class PostDAO implements IDAO<Post>{
     private final String COMMENT_QUANTITY_QUERY = "select commentquantity from post where id=?";
     private final String LIKE_QUANTITY_QUERY = "select likequantity from post where id=?";
     private final String LIKE_QUANTITY_UPDATE ="update post set likequantity = ? where id = ?";
-    private final String TOP5_LIKE_QUERY ="";
-    private final String TOP5_COMMENT_QUERY ="";
+    private final String TOP5_LIKE_QUERY ="SELECT * FROM casestudy11.post order by likequantity desc limit 5; ";
+    private final String TOP5_COMMENT_QUERY ="SELECT * FROM casestudy11.post order by commentquantity desc limit 5;";
+
+    public List<Post> topLike() throws SQLException, ClassNotFoundException {
+        List<Post> list=new ArrayList<>();
+        connection=connectionSQL.getConnection();
+        statement=connection.prepareStatement(TOP5_LIKE_QUERY);
+        ResultSet resultSet=statement.executeQuery();
+        while (resultSet.next()){
+            int id=resultSet.getInt("id");
+            int user_id=resultSet.getInt("user_id");
+            String timeString=resultSet.getString("time");
+            LocalDateTime time=LocalDateTime.parse(timeString,formatter);
+            String title =resultSet.getString("title");
+            String content = resultSet.getString("content");
+            String status = resultSet.getString("status");
+            int likeQuantity = resultSet.getInt("likequantity");
+            int commentQuantity=resultSet.getInt("commentquantity");
+            list.add(new Post(id,user_id,time,title,content,status,likeQuantity,commentQuantity));
+        }
+        return list;
+    }
+    public List<Post> topCommnent() throws SQLException, ClassNotFoundException {
+        List<Post> list=new ArrayList<>();
+        connection=connectionSQL.getConnection();
+        statement=connection.prepareStatement(TOP5_COMMENT_QUERY);
+        ResultSet resultSet=statement.executeQuery();
+        while (resultSet.next()){
+            int id=resultSet.getInt("id");
+            int user_id=resultSet.getInt("user_id");
+            String timeString=resultSet.getString("time");
+            LocalDateTime time=LocalDateTime.parse(timeString,formatter);
+            String title =resultSet.getString("title");
+            String content = resultSet.getString("content");
+            String status = resultSet.getString("status");
+            int likeQuantity = resultSet.getInt("likequantity");
+            int commentQuantity=resultSet.getInt("commentquantity");
+            list.add(new Post(id,user_id,time,title,content,status,likeQuantity,commentQuantity));
+        }
+        return list;
+    }
+    public List<Post> findByUserID(int id) throws SQLException, ClassNotFoundException {
+         List<Post> list=new ArrayList<>();
+        connection=connectionSQL.getConnection();
+        statement=connection.prepareStatement(FIND_BY_USER_ID_QUERY);
+        statement.setInt(1,id);
+        ResultSet resultSet=statement.executeQuery();
+        while (resultSet.next()){
+            int user_id=resultSet.getInt("user_id");
+            String timeString=resultSet.getString("time");
+            LocalDateTime time=LocalDateTime.parse(timeString,formatter);
+            String title =resultSet.getString("title");
+            String content = resultSet.getString("content");
+            String status = resultSet.getString("status");
+            int likeQuantity = resultSet.getInt("likequantity");
+            int commentQuantity=resultSet.getInt("commentquantity");
+            list.add(new Post(id,user_id,time,title,content,status,likeQuantity,commentQuantity));
+        }
+        return list;
+    }
     public void likeUpdateQuery(int id) throws SQLException, ClassNotFoundException {
         int quantity=likeQuantity(id);
         ++quantity;

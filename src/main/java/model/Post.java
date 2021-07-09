@@ -15,6 +15,14 @@ public class Post {
     public Post() {
     }
 
+    public Post(int user_id, LocalDateTime time, String title, String content, String status) {
+        this.user_id = user_id;
+        this.time = time;
+        this.title = title;
+        this.content = content;
+        this.status = status;
+    }
+
     public Post(int id, int user_id, LocalDateTime time, String title, String content, String status) {
         this.id = id;
         this.user_id = user_id;

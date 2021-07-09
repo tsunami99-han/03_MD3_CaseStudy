@@ -35,7 +35,10 @@
 <!-- Dùng Để Chèn Hình Ảnh-->
 <section class="section1">
 </section>
-<div class="text-center" aria-hidden="true" > <h1>Thanh xuân như một tách trà</h1>
+<%--<section class="section2">--%>
+
+<%--</section>--%>
+<div class="text-center" aria-hidden="true" style="margin-top: 30px " > <h1>Thanh xuân như một tách trà</h1>
     <p>
         Code đi code lại hết bà thanh xuân ...
     </p>
@@ -50,10 +53,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Bài viết nổi bật <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="users?action=toplike&id=${username.id}">Blog nổi bật <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Bài viết mới</a>
+                <a class="nav-link" href="users?action=topcmt&id=${username.id}">Hóng biến</a>
             </li>
            <c:if test="${username!=null}"> <li class="nav-item">
                <a class="nav-link" href="users?action=create&id=${username.id}">Tạo blog mới</a>
@@ -63,28 +66,32 @@
             </li></c:if>
         </ul>
         <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search">
+            <input type="hidden" name="action" value="search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
     </div>
 </nav>
 <div class="row row1 container">
-    <div class="col-md-3 div1" style=" height: 500px"> hihi</div>
+    <div class="col-md-3 div1" style=" height: 500px"> </div>
     <div class="col-md-7">
         <c:forEach var="p" items="${list}">
-         <div class="post" style="padding-bottom: 30px">
-             <i class="time">${p.time}</i>
-             <h4 >${p.title} </h4>
-             ------------------ <br>
-                 ${p.getContent()} <br>
-                 ${p.likeQuantity} lượt thích | ${p.commentQuantity} lượt bình luận
-             <a href="users?action=view&id=${p.id}">Xem thêm</a>
-         </div>
+         <c:if test="${p.status.equals('public')}">
+             <div class="post" style="padding-bottom: 30px">
+                 <i class="time">${p.time}</i>
+                 <h4 >${p.title} </h4>
+                 ------------------ <br>
+                     ${p.getContent()} <br>
+                     ${p.likeQuantity} <img style="width: 30px;height: 30px" src="/image/like.png" alt=""> | ${p.commentQuantity} lượt bình luận
+                 <c:if test="${username==null}"><a href="users?action=login">Xem thêm</a></c:if>
+                 <c:if test="${username!=null}"><a href="users?action=view&id=${p.id}">Xem thêm</a></c:if>
+             </div>
+         </c:if>
              </c:forEach>
 
     </div>
     <div class="col-md-2"></div>
 </div>
-
+<div style="height: 300px; background-color: #FFC312;margin-top: 30px"></div>
 </body>
 </html>

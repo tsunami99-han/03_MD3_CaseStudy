@@ -17,6 +17,8 @@ public class AdminController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
         String action = request.getParameter("action");
         if (action == null) {
             action = "";
@@ -72,24 +74,32 @@ public class AdminController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
         String action = request.getParameter("action");
         if (action == null) {
             action = "";
         }
-        switch (action) {
-            case "create":
-                addCustomer(request, response);
-                break;
-            case "view":
-                editCustomer(request, response);
-                showListPage(request, response);
-                break;
-            case "delete":
-                deleteCustomer(request, response);
-                break;
-            case "edit":
-                editCustomer(request,response);
-                break;
+        try {
+            switch (action) {
+                case "create":
+                    addCustomer(request, response);
+                    break;
+                case "view":
+                    editCustomer(request, response);
+                    showListPage(request, response);
+                    break;
+                case "delete":
+                    deleteCustomer(request, response);
+                    break;
+                case "edit":
+                    editCustomer(request,response);
+                    break;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
 
@@ -140,7 +150,7 @@ public class AdminController extends HttpServlet {
     }
 
 
-    private void addCustomer(HttpServletRequest request, HttpServletResponse response) {
+    private void addCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException, ClassNotFoundException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String fullname = request.getParameter("fullname");
@@ -148,22 +158,12 @@ public class AdminController extends HttpServlet {
 
         String time = request.getParameter("dateofbirth");
         LocalDate dateofbirth = LocalDate.parse(time);
-
         String address = request.getParameter("address");
         String desc = request.getParameter("desc");
         String imgLink = request.getParameter("image");
-        try {
-            userDAO.add(new User( username, password, fullname, role, dateofbirth, address, desc, imgLink));
+            userDAO.add(new User( username, password, fullname, role, dateofbirth, address, desc, "/image/"+imgLink));
             showListPage(request, response);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (ServletException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 }
 

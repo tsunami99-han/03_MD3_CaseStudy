@@ -55,10 +55,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Blog nổi bật <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="users?action=toplike&id=${username.id}">Blog nổi bật <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Blog mới nhất</a>
+                <a class="nav-link" href="users?action=topcmt&id=${username.id}">Hóng biến</a>
             </li>
             <c:if test="${username!=null}"> <li class="nav-item">
                 <a class="nav-link" href="users?action=create&id=${username.id}">Tạo blog mới</a>
@@ -74,15 +74,15 @@
     </div>
 </nav>
 <div class="row">
-    <div class="col-md-5">
-        <form class="create" style="border: 3px red solid;border-radius: 10px">
+    <div class="col-md-7">
+        <form class="create" style="border: 3px red solid;border-radius: 10px" method="post">
             <legend>Bài viết mới</legend>
-            <input type="hidden" name="user_id" value="${user.id}">
+            <input type="hidden" name="user_id" value="${username.id}">
             <h5>${user.fullName}</h5>
             <b>Tiêu đề :</b> <input type="text" placeholder="Nhập tiêu đề ...." name="title"> <br>
-            <b style="margin-top: 20px">Nôi dung :</b> <br><textarea style="border-radius: 20px" name="content"  cols="30" rows="10" placeholder="Nhập nội dung ...."></textarea> <br>
+            <b style="margin-top: 20px">Nôi dung :</b> <br><textarea style="border-radius: 20px" name="content"  cols="50" rows="10" placeholder="Nhập nội dung ...."></textarea> <br>
             <b>Trạng thái :</b> <select name="status">
-            <option value="public">Public</option>
+            <option value="public" >Public</option>
             <option value="private">Private</option>
         </select>
             <input type="hidden" name="action" value="create">

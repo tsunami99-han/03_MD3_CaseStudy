@@ -6,8 +6,8 @@ dao/UserDAO.java
  dao.UserDAO
 controller/AdminController.java
  controller.AdminController
-controller/LikeController.java
- controller.LikeController
+model/Post.java
+ model.Post
 dao/IDAO.java
  dao.IDAO
 model/User.java
@@ -16,11 +16,9 @@ dao/SQLConnection.java
  dao.SQLConnection
 model/Comment.java
  model.Comment
-model/Post.java
- model.Post
 dao/LikeDAO.java
  dao.LikeDAO
-dao/PostDAO.java
- dao.PostDAO
 controller/UserController.java
  controller.UserController
+dao/PostDAO.java
+ dao.PostDAO

@@ -15,6 +15,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
     <title>Đoàn Hồng Sơn đang xem cụ thể nè</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .like1 {
+            margin-left: 40px;
+        }
+    </style>
 </head>
 <body>
 <nav>
@@ -49,10 +54,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Bài viết nổi bật <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="users?action=toplike&id=${username.id}">Blog nổi bật <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Bài viết mới</a>
+                <a class="nav-link" href="users?action=topcmt&id=${username.id}">Hóng biến</a>
             </li>
             <c:if test="${username!=null}"> <li class="nav-item">
                 <a class="nav-link" href="users?action=create&id=${username.id}">Tạo blog mới</a>
@@ -69,16 +74,16 @@
 </nav>
 <div class="row">
     <div class="col-md-7" style="margin-top: 30px;margin-left: 30px">
-        <h2><a href="">${user.fullName}</a></h2>
+        <img width="50px" height="50px " src="${user.imgLink}" alt=""><b><a href="">${user.fullName}</a></b>
         <h3>${post.title}</h3>
         ------------------------- <br>
         <p> ${post.content}</p>
-        ${post.time}
+        <i style="font-size: 10px">${post.time}</i>
         <hr>
         <B>Bình luận :</B> <br>
         <c:if test="${listComment.size()>0}">
            <c:forEach var="i" begin="0" end="${listComment.size()-1}">
-               <a href="users?action=viewuser">${listUser.get(i).getFullName()} </a>:  <i>${listComment.get(i).getContent()}</i> <br>
+               <img width="40px" height="40px" src="${listUser.get(i).getImgLink()}" alt=""><a href="users?action=viewuser">${listUser.get(i).getFullName()} </a>:  <i>${listComment.get(i).getContent()}</i> <br>
             <i style="font-size: 8px">${listComment.get(i).getTime()}</i>
             <hr>
             </c:forEach>
@@ -86,13 +91,12 @@
     </div>
 </div>
 
-<form action="">
-    <c:if test="${like.equals('chualike')}"> <a href="users?action=like&id=${post.id}&user_id=${username.id}">Like</a> </c:if>
-    <c:if test="${like.equals('dalike')}"> <a href="users?action=dislike&id=${post.id}&user_id=${username.id}">Dislike</a> </c:if>
-    <c:if test="${listLike.size()==0}"> <a href="users?action=like&id=${post.id}&user_id=${username.id}">Like</a></c:if> ${post.likeQuantity} like!
+<form class="like1">
+    <c:if test="${like.equals('chualike')}"> <a href="users?action=like&id=${post.id}&user_id=${username.id}">Like </a><img style="width: 20px;height: 20px"  src="/image/dislike.png" alt=""></c:if>
+    <c:if test="${like.equals('dalike')}"> <a href="users?action=dislike&id=${post.id}&user_id=${username.id}">Dislike<img style="width: 20px;height: 20px" src="/image/like.png" alt=""></a> </c:if>
+    <c:if test="${listLike.size()==0}"> <a href="users?action=like&id=${post.id}&user_id=${username.id}">Like <img style="width: 20px;height: 20px"  src="/image/dislike.png" alt=""></a></c:if> | Lượt thích :${post.likeQuantity} <img style="width: 20px;height: 20px" src="/image/like.png" alt="">
 </form>
-<form method="post">
-    <input type="hidden" name="user">
+<form method="get" class="like1">
     <input type="hidden" name="action" value="comment">
     <c:if test="${username!=null}"><input type="hidden" name="userid" value="${username.id}"></c:if>
     <input type="hidden" name="id" value="${post.id}">
@@ -109,5 +113,6 @@
     }
 </script>
 </text>
+<div style="height: 300px; background-color: #FFC312; margin-top: 30px"></div>
 </body>
 </html>
