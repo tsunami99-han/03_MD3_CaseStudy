@@ -14,7 +14,13 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
     <title>Đoàn Hồng Sơn đang tạo mới nè</title>
-    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .create {
+            padding: 10px;
+            margin-left: 30px;
+        }
+    </style>
 </head>
 <body>
 <nav>
@@ -41,7 +47,7 @@
     <h2>Blog!!!! Mỗi ngày vài câu chuyện</h2>
 </div>
 <nav class="navbar navbar-expand-lg navbar-light bg-light nav1">
-    <a class="navbar-brand" href="#">Trang chủ</a>
+    <a class="navbar-brand" href="users?action=list">Trang chủ</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -49,10 +55,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Bài viết nổi bật <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="#">Blog nổi bật <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Bài viết mới</a>
+                <a class="nav-link" href="#">Blog mới nhất</a>
             </li>
             <c:if test="${username!=null}"> <li class="nav-item">
                 <a class="nav-link" href="users?action=create&id=${username.id}">Tạo blog mới</a>
@@ -67,5 +73,39 @@
         </form>
     </div>
 </nav>
+<div class="row">
+    <div class="col-md-5">
+        <form class="create" style="border: 3px red solid;border-radius: 10px">
+            <legend>Bài viết mới</legend>
+            <input type="hidden" name="user_id" value="${user.id}">
+            <h5>${user.fullName}</h5>
+            <b>Tiêu đề :</b> <input type="text" placeholder="Nhập tiêu đề ...." name="title"> <br>
+            <b style="margin-top: 20px">Nôi dung :</b> <br><textarea style="border-radius: 20px" name="content"  cols="30" rows="10" placeholder="Nhập nội dung ...."></textarea> <br>
+            <b>Trạng thái :</b> <select name="status">
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+        </select>
+            <input type="hidden" name="action" value="create">
+            <button>Đăng bài</button>
+        </form>
+    </div>
+</div>
+<div class="text-center"><h3>Bảng tin</h3></div>
+<div class="row row1 container" style="margin-top: 20px">
+    <div class="col-md-3 div1" style=" height: 500px"> hihi</div>
+    <div class="col-md-7">
+        <c:forEach var="p" items="${list}">
+            <div class="post" style="padding-bottom: 30px">
+                <i class="time">${p.time}</i>
+                <h4 >${p.title} </h4>
+                ------------------ <br>
+                    ${p.getContent()} <br>
+                    ${p.likeQuantity} lượt thích | ${p.commentQuantity} lượt bình luận
+                <a href="users?action=view&id=${p.id}">Xem thêm</a>
+            </div>
+        </c:forEach>
+
+    </div>
+    <div class="col-md-2"></div>
 </body>
 </html>

@@ -41,7 +41,7 @@
     <h2>Blog!!!! Mỗi ngày vài câu chuyện</h2>
 </div>
 <nav class="navbar navbar-expand-lg navbar-light bg-light nav1">
-    <a class="navbar-brand" href="#">Trang chủ</a>
+    <a class="navbar-brand" href="users?action=list">Trang chủ</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -75,20 +75,34 @@
         <p> ${post.content}</p>
         ${post.time}
         <hr>
+        <B>Bình luận :</B> <br>
         <c:if test="${listComment.size()>0}">
-            <c:forEach var="i" begin="0" end="${listComment.size()-1}">
-                ${listUser.get(i).getFullName()} :  ${listComment.get(i).getContent()} <br>
-                ${listComment.get(i).getTime()}
-                <hr>
+           <c:forEach var="i" begin="0" end="${listComment.size()-1}">
+               <a href="users?action=viewuser">${listUser.get(i).getFullName()} </a>:  <i>${listComment.get(i).getContent()}</i> <br>
+            <i style="font-size: 8px">${listComment.get(i).getTime()}</i>
+            <hr>
             </c:forEach>
-        </c:if>
+            </c:if>
     </div>
 </div>
 
-<form action="">
-    <button value="Like"></button> ${post.likeQuantity} like!
-     <input type="text" placeholder="Comment"> <button type="submit">Comment</button>
+<form method="get" onkeydown="checkLogin()">
+    <button>Like</button> ${post.likeQuantity} like!
+    <input type="hidden" name="action" value="comment">
+    <c:if test="${username!=null}"><input type="hidden" name="userid" value="${username.id}" id="userid"></c:if>
+    <input type="hidden" name="id" value="${post.id}">
+    <input type="text"  placeholder="Viết bình luận ...." name="content" width="200px" height="30px">
+    <button id="btn">Comment</button>
 </form>
+<script>
+    function checkLogin(){
+        if (document.getElementById("userid").value !== ""){
+            document.getElementById("bth").disabled = false;
+        }else {
+            document.getElementById("bth").disabled = true;
+        }
+    }
+</script>
 </text>
 </body>
 </html>

@@ -12,6 +12,8 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class UserController extends HttpServlet {
     UserDAO userDAO=new UserDAO();
     CommentDAO commentDAO=new CommentDAO();
     String message = "";
+    DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -49,6 +52,9 @@ public class UserController extends HttpServlet {
                     break;
                 case "login":
                    showFormLogIn(request,response);
+                    break;
+                case "comment":
+                    commentDao(request,response);
                     break;
                 default:
                     findAll(request, response);
@@ -116,7 +122,7 @@ public class UserController extends HttpServlet {
         Post post=postDAO.findById(id);
         List<User> listUser= new ArrayList<>();
         List<Comment> listComment=commentDAO.findByPostID(id);
-        User user=userDAO.findById(post.getUser_id());
+        User users=userDAO.findById(post.getUser_id());
         for (int i=0;i<listComment.size();i++){
             listUser.add(userDAO.findById(listComment.get(i).getUser_id()));
         }
@@ -124,7 +130,8 @@ public class UserController extends HttpServlet {
         request.setAttribute("post",post);
         request.setAttribute("listComment",listComment);
         request.setAttribute("listUser",listUser);
-        request.setAttribute("user",user);
+        request.setAttribute("user",users);
+        request.setAttribute("username",user);
         requestDispatcher.forward(request,response);
     }
     private void showFormEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -139,9 +146,25 @@ public class UserController extends HttpServlet {
         request.setAttribute("username",user);
         requestDispatcher.forward(request, response);
     }
-    private void showCreateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void showCreateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException, ClassNotFoundException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("post/create.jsp");
         request.setAttribute("username",user);
+        List<Post> list = postDAO.findAll();
+        request.setAttribute("list", list);
         requestDispatcher.forward(request,response);
 }
+    private void commentDao(HttpServletRequest request, HttpServletResponse response) throws SQLException, ClassNotFoundException, ServletException, IOException {
+        int user_id=Integer.parseInt(request.getParameter("userid"));
+        int post_id=Integer.parseInt(request.getParameter("id"));
+        String content=request.getParameter("content");
+//        LocalDateTime timeNow=LocalDateTime.now();
+//        String timeString=timeNow.toString().substring(0,19);
+        String timeString ="2021-07-09 09:21:50";
+        LocalDateTime time=LocalDateTime.parse(timeString,formatter);
+        Comment comment=new Comment(post_id,user_id,content,time);
+        commentDAO.addComment(comment);
+        postDAO.commentUpdateQuery(post_id);
+        findByID(request, response);
+//        RequestDispatcher requestDispatcher = request.getRequestDispatcher("");
+    }
 }

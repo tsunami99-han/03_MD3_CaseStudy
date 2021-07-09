@@ -18,7 +18,7 @@ public class CommentDAO {
     PreparedStatement statement = null;
     DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final String All_COMMENT_QUERY= "select * from comment where post_id=? order by time";
-    private final String COMMENT="insert into comment values (?,?,?,?) ; ";
+    private final String COMMENT="insert into comment(post_id,user_id,content,time ) values (?,?,?,?) ; ";
     private final String EDIT_COMMENT="update comment set content=? where post_id = ? and user_id = ?";
     private final String DELETE_COMMENT= "delete from comment where post_id = ? and user_id = ?;";
 
@@ -37,5 +37,14 @@ public class CommentDAO {
             list.add(new Comment(post_id,user_id,content,time));
         }
         return list;
+    }
+    public void addComment(Comment comment) throws SQLException, ClassNotFoundException {
+        connection=connectionSQL.getConnection();
+        statement= connection.prepareStatement(COMMENT);
+        statement.setInt(1,comment.getPost_id());
+        statement.setInt(2,comment.getUser_id());
+        statement.setString(3,comment.getContent());
+        statement.setString(4,comment.getTime().toString());
+        statement.executeUpdate();
     }
 }
