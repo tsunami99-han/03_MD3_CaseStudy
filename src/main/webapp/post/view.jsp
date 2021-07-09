@@ -26,7 +26,7 @@
         <%--        <li><a href=""><i class="fa fa-location-arrow" aria-hidden="true"></i> Địa Chỉ</a></li>--%>
         <li><c:if test="${username !=null}"><a href="#">${username.fullName}</a></c:if></li>
         <li><c:if test="${username ==null}"><a href="users?action=login">Login</a></c:if></li>
-        <li><a href="">Logout</a></li>
+        <li><a href="users?action=login">Logout</a></li>
     </ul>
 </nav>
 <!--Kết Thúc Navigation -->
@@ -86,10 +86,15 @@
     </div>
 </div>
 
-<form method="get" onkeydown="checkLogin()">
-    <button>Like</button> ${post.likeQuantity} like!
+<form action="">
+    <c:if test="${like.equals('chualike')}"> <a href="users?action=like&id=${post.id}&user_id=${username.id}">Like</a> </c:if>
+    <c:if test="${like.equals('dalike')}"> <a href="users?action=dislike&id=${post.id}&user_id=${username.id}">Dislike</a> </c:if>
+    <c:if test="${listLike.size()==0}"> <a href="users?action=like&id=${post.id}&user_id=${username.id}">Like</a></c:if> ${post.likeQuantity} like!
+</form>
+<form method="post">
+    <input type="hidden" name="user">
     <input type="hidden" name="action" value="comment">
-    <c:if test="${username!=null}"><input type="hidden" name="userid" value="${username.id}" id="userid"></c:if>
+    <c:if test="${username!=null}"><input type="hidden" name="userid" value="${username.id}"></c:if>
     <input type="hidden" name="id" value="${post.id}">
     <input type="text"  placeholder="Viết bình luận ...." name="content" width="200px" height="30px">
     <button id="btn">Comment</button>

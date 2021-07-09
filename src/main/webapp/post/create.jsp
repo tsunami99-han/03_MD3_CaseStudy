@@ -32,7 +32,7 @@
         <%--        <li><a href=""><i class="fa fa-location-arrow" aria-hidden="true"></i> Địa Chỉ</a></li>--%>
         <li><c:if test="${username !=null}"><a href="#">${username.fullName}</a></c:if></li>
         <li><c:if test="${username ==null}"><a href="users?action=login">Login</a></c:if></li>
-        <li><a href="">Logout</a></li>
+        <li><a href="users?action=login">Logout</a></li>
     </ul>
 </nav>
 <!--Kết Thúc Navigation -->

@@ -1,9 +1,11 @@
 package controller;
 
 import dao.CommentDAO;
+import dao.LikeDAO;
 import dao.PostDAO;
 import dao.UserDAO;
 import model.Comment;
+import model.Like;
 import model.Post;
 import model.User;
 
@@ -23,6 +25,7 @@ public class UserController extends HttpServlet {
     User user=null;
     UserDAO userDAO=new UserDAO();
     CommentDAO commentDAO=new CommentDAO();
+    LikeDAO likeDAO=new LikeDAO();
     String message = "";
     DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     @Override
@@ -53,8 +56,14 @@ public class UserController extends HttpServlet {
                 case "login":
                    showFormLogIn(request,response);
                     break;
-                case "comment":
-                    commentDao(request,response);
+//                case "comment":
+//                    commentDao(request,response);
+//                    break;
+                case "like":
+                    likeDao(request, response);
+                    break;
+                case "dislike":
+                    dislike(request,response);
                     break;
                 default:
                     findAll(request, response);
@@ -88,12 +97,43 @@ public class UserController extends HttpServlet {
                        findAll(request,response);
                    }
                     break;
+                case "comment":
+                    commentDao(request,response);
+                    break;
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+    private void likeDao(HttpServletRequest request, HttpServletResponse response) throws SQLException, ClassNotFoundException, ServletException, IOException {
+        int post_id=Integer.parseInt(request.getParameter("id"));
+        int user_id=Integer.parseInt(request.getParameter("user_id"));
+        Like like=new Like(post_id,user_id);
+        likeDAO.addLike(like);
+        postDAO.likeUpdateQuery(post_id);
+       findByID(request,response);
+    }
+    private void dislike(HttpServletRequest request, HttpServletResponse response) throws SQLException, ClassNotFoundException, ServletException, IOException {
+        int post_id=Integer.parseInt(request.getParameter("id"));
+        int user_id=Integer.parseInt(request.getParameter("user_id"));
+        likeDAO.deleteLike(user_id,post_id);
+        postDAO.likeDeleteUpdate(post_id);
+        findByID(request,response);
+    }
+    private void commentDao(HttpServletRequest request, HttpServletResponse response) throws SQLException, ClassNotFoundException, ServletException, IOException {
+        int user_id=Integer.parseInt(request.getParameter("userid"));
+        int post_id=Integer.parseInt(request.getParameter("id"));
+        String content=request.getParameter("content");
+        LocalDateTime timeNow=LocalDateTime.now();
+        String timeString =timeNow.format(formatter);
+        LocalDateTime time=LocalDateTime.parse(timeString,formatter);
+        Comment comment=new Comment(post_id,user_id,content,time);
+        commentDAO.addComment(comment);
+        postDAO.commentUpdateQuery(post_id);
+        findByID(request, response);
+//        RequestDispatcher requestDispatcher = request.getRequestDispatcher("");
     }
     private void showFormLogIn(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher requestDispatcher=request.getRequestDispatcher("post/login.jsp");
@@ -122,6 +162,15 @@ public class UserController extends HttpServlet {
         Post post=postDAO.findById(id);
         List<User> listUser= new ArrayList<>();
         List<Comment> listComment=commentDAO.findByPostID(id);
+        List<Like> likeList=likeDAO.findByPostID(id);
+        for (Like like:likeList){
+            if (user.getId()==like.getUser_id()){
+                request.setAttribute("like","dalike");
+                break;
+            }else {
+                request.setAttribute("like","chualike");
+            }
+        }
         User users=userDAO.findById(post.getUser_id());
         for (int i=0;i<listComment.size();i++){
             listUser.add(userDAO.findById(listComment.get(i).getUser_id()));
@@ -132,6 +181,7 @@ public class UserController extends HttpServlet {
         request.setAttribute("listUser",listUser);
         request.setAttribute("user",users);
         request.setAttribute("username",user);
+        request.setAttribute("listLike",likeList);
         requestDispatcher.forward(request,response);
     }
     private void showFormEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -153,18 +203,4 @@ public class UserController extends HttpServlet {
         request.setAttribute("list", list);
         requestDispatcher.forward(request,response);
 }
-    private void commentDao(HttpServletRequest request, HttpServletResponse response) throws SQLException, ClassNotFoundException, ServletException, IOException {
-        int user_id=Integer.parseInt(request.getParameter("userid"));
-        int post_id=Integer.parseInt(request.getParameter("id"));
-        String content=request.getParameter("content");
-//        LocalDateTime timeNow=LocalDateTime.now();
-//        String timeString=timeNow.toString().substring(0,19);
-        String timeString ="2021-07-09 09:21:50";
-        LocalDateTime time=LocalDateTime.parse(timeString,formatter);
-        Comment comment=new Comment(post_id,user_id,content,time);
-        commentDAO.addComment(comment);
-        postDAO.commentUpdateQuery(post_id);
-        findByID(request, response);
-//        RequestDispatcher requestDispatcher = request.getRequestDispatcher("");
-    }
 }

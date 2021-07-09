@@ -27,9 +27,39 @@ public class PostDAO implements IDAO<Post>{
     private final String DELETE_LIKE_BY_POSTID =" delete from like where post_id= ?";
     private final String COMMENT_QUANTITY_UPDATE= "update post set commentquantity = ? where id = ?";
     private final String COMMENT_QUANTITY_QUERY = "select commentquantity from post where id=?";
+    private final String LIKE_QUANTITY_QUERY = "select likequantity from post where id=?";
+    private final String LIKE_QUANTITY_UPDATE ="update post set likequantity = ? where id = ?";
     private final String TOP5_LIKE_QUERY ="";
     private final String TOP5_COMMENT_QUERY ="";
-
+    public void likeUpdateQuery(int id) throws SQLException, ClassNotFoundException {
+        int quantity=likeQuantity(id);
+        ++quantity;
+        connection=connectionSQL.getConnection();
+        statement=connection.prepareStatement(LIKE_QUANTITY_UPDATE);
+        statement.setInt(1,quantity);
+        statement.setInt(2,id);
+        statement.executeUpdate();
+    }
+    public void likeDeleteUpdate(int id) throws SQLException, ClassNotFoundException {
+        int quantity=likeQuantity(id);
+        --quantity;
+        connection=connectionSQL.getConnection();
+        statement=connection.prepareStatement(LIKE_QUANTITY_UPDATE);
+        statement.setInt(1,quantity);
+        statement.setInt(2,id);
+        statement.executeUpdate();
+    }
+    public int likeQuantity(int id) throws SQLException, ClassNotFoundException {
+        connection=connectionSQL.getConnection();
+        statement=connection.prepareStatement(LIKE_QUANTITY_QUERY);
+        statement.setInt(1,id);
+        ResultSet resultSet=statement.executeQuery();
+        while (resultSet.next()){
+            int quantity=resultSet.getInt("likequantity");
+            return quantity;
+        }
+        return 0;
+    }
     public void commentUpdateQuery(int id) throws SQLException, ClassNotFoundException {
         int quantity=commentQuantity(id);
         ++quantity;
