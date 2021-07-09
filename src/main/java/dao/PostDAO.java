@@ -25,7 +25,31 @@ public class PostDAO implements IDAO<Post>{
     private final String DELETE_COMMENT_BY_POSTID =" delete from comment where post_id = ?";
     private final String DELETE_POST_BY_ID = "delete from post where id=?";
     private final String DELETE_LIKE_BY_POSTID =" delete from like where post_id= ?";
+    private final String COMMENT_QUANTITY_UPDATE= "update post set commentquantity = ? where id = ?";
+    private final String COMMENT_QUANTITY_QUERY = "select commentquantity from post where id=?";
+    private final String TOP5_LIKE_QUERY ="";
+    private final String TOP5_COMMENT_QUERY ="";
 
+    public void commentUpdateQuery(int id) throws SQLException, ClassNotFoundException {
+        int quantity=commentQuantity(id);
+        ++quantity;
+        connection=connectionSQL.getConnection();
+        statement=connection.prepareStatement(COMMENT_QUANTITY_UPDATE);
+        statement.setInt(1,quantity);
+        statement.setInt(2,id);
+        statement.executeUpdate();
+    }
+    public int commentQuantity(int id) throws SQLException, ClassNotFoundException {
+        connection=connectionSQL.getConnection();
+        statement=connection.prepareStatement(COMMENT_QUANTITY_QUERY);
+        statement.setInt(1,id);
+        ResultSet resultSet=statement.executeQuery();
+        while (resultSet.next()){
+            int quantity=resultSet.getInt("commentquantity");
+            return quantity;
+        }
+        return 0;
+    }
     @Override
     public List<Post> findAll() throws SQLException, ClassNotFoundException {
         List<Post> list=new ArrayList<>();

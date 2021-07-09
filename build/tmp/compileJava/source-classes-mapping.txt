@@ -1,26 +1,26 @@
+dao/IDAO.java
+ dao.IDAO
+model/Post.java
+ model.Post
+model/Comment.java
+ model.Comment
+model/User.java
+ model.User
+model/Like.java
+ model.Like
+controller/LikeController.java
+ controller.LikeController
 controller/UserController.java
  controller.UserController
 dao/CommentDAO.java
  dao.CommentDAO
-model/Like.java
- model.Like
-model/User.java
- model.User
+dao/LikeDAO.java
+ dao.LikeDAO
 dao/SQLConnection.java
  dao.SQLConnection
-model/Comment.java
- model.Comment
 dao/UserDAO.java
  dao.UserDAO
 dao/PostDAO.java
  dao.PostDAO
-model/Post.java
- model.Post
 controller/AdminController.java
  controller.AdminController
-dao/IDAO.java
- dao.IDAO
-controller/LikeController.java
- controller.LikeController
-dao/LikeDAO.java
- dao.LikeDAO

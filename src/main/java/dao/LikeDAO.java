@@ -21,11 +21,11 @@ public class LikeDAO {
         int count=resultSet.getRow();
         return count;
     }
-    public void addLike(Like like)throws SQLException, ClassNotFoundException{
+    public void addLike(int id_post,int id_user)throws SQLException, ClassNotFoundException{
         Connection connection=sqlConnection.getConnection();
         PreparedStatement preparedStatement=connection.prepareStatement(ADD_LIKE);
-        preparedStatement.setInt(1,like.getPost_id());
-        preparedStatement.setInt(1,like.getUser_id());
+        preparedStatement.setInt(1,id_post);
+        preparedStatement.setInt(1,id_user);
         preparedStatement.executeUpdate();
     }
     public void deleteLike(int id)throws SQLException, ClassNotFoundException{

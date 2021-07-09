@@ -42,7 +42,7 @@
         <h2>Blog!!!! Mỗi ngày vài câu chuyện</h2>
     </div>
 <nav class="navbar navbar-expand-lg navbar-light bg-light nav1">
-    <a class="navbar-brand" href="#">Trang chủ</a>
+    <a class="navbar-brand" href="users?action=list">Trang chủ</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
